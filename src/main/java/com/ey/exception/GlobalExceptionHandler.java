@@ -49,5 +49,17 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_REQUEST);
 	}
 	
+	@ExceptionHandler(MovieNotFoundException.class)
+	public ResponseEntity<Object> handleMovieNotFoundException(MovieNotFoundException ex){
+		return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_REQUEST);
+	}
+	
+	@ExceptionHandler(TheatreNotFoundException.class)
+	public ResponseEntity<Object> handleTheatreNotFoundException(TheatreNotFoundException ex){
+		return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_REQUEST);
+	}
+	
+	
+	
 	
 }
