@@ -59,6 +59,16 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_REQUEST);
 	}
 	
+	@ExceptionHandler(ScreenNotFoundException.class)
+	public ResponseEntity<Object> handleScreenNotFoundException(ScreenNotFoundException ex){
+		return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_REQUEST);
+	}
+	
+	@ExceptionHandler(ShowNotFoundException.class)
+	public ResponseEntity<Object> handleShowNotFoundException(ShowNotFoundException ex){
+		return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_REQUEST);
+	}
+	
 	
 	
 	

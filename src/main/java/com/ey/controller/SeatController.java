@@ -1,0 +1,30 @@
+package com.ey.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.ey.service.SeatService;
+
+@RestController
+@RequestMapping("/api/seats")
+public class SeatController {
+	
+	@Autowired
+	private SeatService seatService;
+	
+	@PostMapping("/generate/{screenId}")
+	public ResponseEntity<?> generateSeats(@PathVariable Long screenId){
+		return seatService.generateSeatsForScreen(screenId);
+	}
+	
+	@GetMapping("/screen/{screenId}")
+	public ResponseEntity<?> getSeatsByScreen(@PathVariable Long screenId){
+		return seatService.getSeatsByScreenId(screenId);
+	}
+
+}
