@@ -10,10 +10,15 @@ import org.springframework.stereotype.Service;
 
 import com.ey.dto.request.CreateMovieRequest;
 import com.ey.dto.response.MovieResponse;
+import com.ey.dto.response.ShowSummaryResponse;
+import com.ey.dto.response.TheatreSummaryResponse;
 import com.ey.entity.Movie;
+import com.ey.entity.MovieShow;
 import com.ey.exception.MovieNotFoundException;
+import com.ey.exception.ResourceNotFoundException;
 import com.ey.mapper.MovieMapper;
 import com.ey.repository.MovieRepository;
+import com.ey.repository.ShowRepository;
 
 import jakarta.validation.Valid;
 
@@ -22,6 +27,9 @@ public class MovieService {
 	
 	@Autowired
 	private MovieRepository movieRepository;
+	
+	@Autowired
+	private ShowRepository showRepository;
 	
 	@Autowired
 	private MovieMapper movieMapper;
@@ -73,6 +81,30 @@ public class MovieService {
 				.orElseThrow(()->new MovieNotFoundException("Movie Not Found with Id: "+movieId));
 		movieRepository.delete(movie);
 		return ResponseEntity.ok("Movie Deleted Successfully");
+	}
+	public List<TheatreSummaryResponse> getTheatresByMovie(Long movieId) {
+
+		List<MovieShow> shows = showRepository.findByMovie_MovieId(movieId);
+
+		if (shows.isEmpty()) {
+			throw new ResourceNotFoundException("No theatres found for movieId: " + movieId);
+		}
+
+		return shows.stream().map(show -> show.getScreen().getTheatre()).distinct().map(
+				theatre -> new TheatreSummaryResponse(theatre.getTheatreId(), theatre.getName(), theatre.getLocation()))
+				.toList();
+	}
+
+	public List<ShowSummaryResponse> getShowsByMovieAndTheatre(Long movieId, Long theatreId) {
+
+		List<MovieShow> shows = showRepository.findByMovie_MovieIdAndScreen_Theatre_TheatreId(movieId, theatreId);
+
+		if (shows.isEmpty()) {
+			throw new ResourceNotFoundException("No shows found for movieId " + movieId + " in theatreId " + theatreId);
+		}
+
+		return shows.stream().map(show -> new ShowSummaryResponse(show.getShowId(), show.getShowDate(),
+				show.getStartTime(), show.getScreen().getName())).toList();
 	}
 
 }

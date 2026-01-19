@@ -10,10 +10,10 @@ import com.ey.entity.Seat;
 @Repository
 public interface SeatRepository extends JpaRepository<Seat, Long>{
 	
-	List<Seat> findByScreenId(Long screenId);
+	List<Seat> findByScreen_ScreenId(Long screenId);
 	
-	long countByScreenId(Long screenId);
+	long countByScreen_ScreenId(Long screenId);
 	
-	boolean existsByScreenId(Long screenId);
+	boolean existsByScreen_ScreenId(Long screenId);
 
 }

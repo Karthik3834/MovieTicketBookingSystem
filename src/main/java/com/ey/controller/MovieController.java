@@ -1,5 +1,7 @@
 package com.ey.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ey.dto.request.CreateMovieRequest;
 import com.ey.dto.response.MovieResponse;
+import com.ey.dto.response.TheatreSummaryResponse;
 import com.ey.service.MovieService;
 
 import jakarta.validation.Valid;
@@ -37,6 +40,18 @@ public class MovieController {
 	@GetMapping("/{movieId}")
 	public ResponseEntity<MovieResponse> getMovieById(@PathVariable Long movieId){
 		return movieService.getMovieById(movieId);
+	}
+	
+	@GetMapping("/{movieId}/theatres")
+	public ResponseEntity<List<TheatreSummaryResponse>> getTheatresByMovie(@PathVariable Long movieId) {
+
+		return ResponseEntity.ok(movieService.getTheatresByMovie(movieId));
+	}
+
+	@GetMapping("/{movieId}/theatres/{theatreId}/shows")
+	public ResponseEntity<?> getShowsByMovieAndTheatre(@PathVariable Long movieId, @PathVariable Long theatreId) {
+
+		return ResponseEntity.ok(movieService.getShowsByMovieAndTheatre(movieId, theatreId));
 	}
 	
 	@PutMapping("/{movieId}")

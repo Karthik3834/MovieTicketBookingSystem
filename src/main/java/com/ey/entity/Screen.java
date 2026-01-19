@@ -1,9 +1,12 @@
 package com.ey.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Screen {
@@ -12,7 +15,13 @@ public class Screen {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long screenId;
 	
-	private Long theatreId;
+//	private Long theatreId;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "theatre_id",nullable =false)
+	private Theatre theatre;
+	
+	
 	
 	private String name;
 	
@@ -23,14 +32,6 @@ public class Screen {
 		super();
 	}
 
-	public Screen(Long screenId, Long theatreId, String name, Boolean active) {
-		super();
-		this.screenId = screenId;
-		this.theatreId = theatreId;
-		this.name = name;
-		this.active = active;
-	}
-
 	public Long getScreenId() {
 		return screenId;
 	}
@@ -39,12 +40,12 @@ public class Screen {
 		this.screenId = screenId;
 	}
 
-	public Long getTheatreId() {
-		return theatreId;
+	public Theatre getTheatre() {
+		return theatre;
 	}
 
-	public void setTheatreId(Long theatreId) {
-		this.theatreId = theatreId;
+	public void setTheatre(Theatre theatre) {
+		this.theatre = theatre;
 	}
 
 	public String getName() {
@@ -62,6 +63,8 @@ public class Screen {
 	public void setActive(Boolean active) {
 		this.active = active;
 	}
+
+	
 
 	
 	

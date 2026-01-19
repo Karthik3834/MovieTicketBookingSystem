@@ -9,11 +9,11 @@ public class CreateShowRequest {
 	
 	@NotNull(message = "Screen Id is required")
 	private Long screenId;
-	@NotNull(message = "Screen Id is required")
+	@NotNull(message = "Movie Id is required")
 	private Long movieId;
-	@NotNull(message = "Screen Id is required")
+	@NotNull(message = "Date is required")
 	private LocalDate showDate;
-	@NotNull(message = "Screen Id is required")
+	@NotNull(message = "Time  is required")
 	private LocalTime startTime;
 	public Long getScreenId() {
 		return screenId;

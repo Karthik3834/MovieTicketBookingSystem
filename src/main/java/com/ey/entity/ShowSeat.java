@@ -1,9 +1,12 @@
 package com.ey.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class ShowSeat {
@@ -12,9 +15,17 @@ public class ShowSeat {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long showSeatId;
 	
-	private Long showId;
+//	private Long showId;
+//	
+//	private Long seatId;
 	
-	private Long seatId;
+	@ManyToOne(fetch= FetchType.LAZY)
+	@JoinColumn(name = "show_id",nullable = false)
+	private MovieShow show;
+	
+	@ManyToOne(fetch= FetchType.LAZY)
+	@JoinColumn(name = "seat_id",nullable = false)
+	private Seat seat;
 	
 	private String status;
 
@@ -26,20 +37,20 @@ public class ShowSeat {
 		this.showSeatId = showSeatId;
 	}
 
-	public Long getShowId() {
-		return showId;
+	public MovieShow getShow() {
+		return show;
 	}
 
-	public void setShowId(Long showId) {
-		this.showId = showId;
+	public void setShow(MovieShow show) {
+		this.show = show;
 	}
 
-	public Long getSeatId() {
-		return seatId;
+	public Seat getSeat() {
+		return seat;
 	}
 
-	public void setSeatId(Long seatId) {
-		this.seatId = seatId;
+	public void setSeat(Seat seat) {
+		this.seat = seat;
 	}
 
 	public String getStatus() {
@@ -49,6 +60,8 @@ public class ShowSeat {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+
+	
 	
 	
 

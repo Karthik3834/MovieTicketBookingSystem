@@ -69,6 +69,20 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_REQUEST);
 	}
 	
+	@ExceptionHandler(ResourceNotFoundException.class)
+	public ResponseEntity<Object> handleResourceNotFoundException(ResourceNotFoundException ex){
+		return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_REQUEST);
+	}
+	
+	@ExceptionHandler(ConflictException.class)
+	public ResponseEntity<Object> handleConflictException(ConflictException ex){
+		return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_REQUEST);
+	}
+	
+	@ExceptionHandler(BadRequestException.class)
+	public ResponseEntity<Object> handleBadRequestException(BadRequestException ex){
+		return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_REQUEST);
+	}
 	
 	
 	

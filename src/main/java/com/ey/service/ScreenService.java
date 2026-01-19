@@ -1,6 +1,7 @@
 package com.ey.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,104 +11,96 @@ import org.springframework.stereotype.Service;
 import com.ey.dto.request.CreateScreenRequest;
 import com.ey.dto.response.ScreenResponse;
 import com.ey.entity.Screen;
+import com.ey.entity.Theatre;
 import com.ey.exception.ScreenNotFoundException;
 import com.ey.mapper.ScreenMapper;
 import com.ey.repository.ScreenRepository;
 import com.ey.repository.SeatRepository;
+import com.ey.repository.TheatreRepository;
 
 @Service
-
 public class ScreenService {
 
 	@Autowired
-
 	private ScreenRepository screenRepository;
 
 	@Autowired
+	private TheatreRepository theatreRepository;
 
+	@Autowired
 	private SeatRepository seatRepository;
 
 	public ResponseEntity<?> createScreen(CreateScreenRequest request) {
 
-		Screen screen = ScreenMapper.toEntity(request);
+		Theatre theatre = theatreRepository.findById(request.getTheatreId())
+				.orElseThrow(() -> new RuntimeException("Theatre not found with id: " + request.getTheatreId()));
 
+		Screen screen = ScreenMapper.toEntity(request, theatre);
 		screen.setActive(true);
 
-		Screen saved = screenRepository.save(screen);
+		Screen savedScreen = screenRepository.save(screen);
 
-		ScreenResponse resp = ScreenMapper.toResponse(saved);
+		ScreenResponse response = ScreenMapper.toResponse(savedScreen);
+		response.setCapacity((int) seatRepository.countByScreen_ScreenId(savedScreen.getScreenId()));
 
-		resp.setCapacity((int) seatRepository.countByScreenId(saved.getScreenId()));
-
-		return new ResponseEntity<>(resp, HttpStatus.CREATED);
-
+		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
 
 	public ResponseEntity<?> getAllScreens() {
 
 		List<Screen> screens = screenRepository.findAll();
 
-		if (screens.isEmpty())
+		if (screens.isEmpty()) {
 			return ResponseEntity.ok("No screens available");
+		}
 
-		List<ScreenResponse> list = screens.stream().map(s -> {
-
-			ScreenResponse r = ScreenMapper.toResponse(s);
-
-			r.setCapacity((int) seatRepository.countByScreenId(s.getScreenId()));
-
+		List<ScreenResponse> responses = screens.stream().map(screen -> {
+			ScreenResponse r = ScreenMapper.toResponse(screen);
+			r.setCapacity((int) seatRepository.countByScreen_ScreenId(screen.getScreenId()));
 			return r;
+		}).collect(Collectors.toList());
 
-		}).toList();
-
-		return ResponseEntity.ok(list);
-
+		return ResponseEntity.ok(responses);
 	}
 
 	public ResponseEntity<?> getScreenById(Long screenId) {
 
-		Screen s = screenRepository.findById(screenId)
-
+		Screen screen = screenRepository.findById(screenId)
 				.orElseThrow(() -> new ScreenNotFoundException("Screen not found with id: " + screenId));
 
-		ScreenResponse r = ScreenMapper.toResponse(s);
+		ScreenResponse response = ScreenMapper.toResponse(screen);
+		response.setCapacity((int) seatRepository.countByScreen_ScreenId(screenId));
 
-		r.setCapacity((int) seatRepository.countByScreenId(screenId));
-
-		return ResponseEntity.ok(r);
-
+		return ResponseEntity.ok(response);
 	}
 
 	public ResponseEntity<?> updateScreen(Long screenId, CreateScreenRequest request) {
 
-		Screen s = screenRepository.findById(screenId)
-
+		Screen screen = screenRepository.findById(screenId)
 				.orElseThrow(() -> new ScreenNotFoundException("Screen not found with id: " + screenId));
 
-		s.setTheatreId(request.getTheatreId());
+		Theatre theatre = theatreRepository.findById(request.getTheatreId())
+				.orElseThrow(() -> new RuntimeException("Theatre not found with id: " + request.getTheatreId()));
 
-		s.setName(request.getName());
+		screen.setTheatre(theatre);
+		screen.setName(request.getName());
 
-		Screen updated = screenRepository.save(s);
+		Screen updated = screenRepository.save(screen);
 
-		ScreenResponse r = ScreenMapper.toResponse(updated);
+		ScreenResponse response = ScreenMapper.toResponse(updated);
+		response.setCapacity((int) seatRepository.countByScreen_ScreenId(screenId));
 
-		r.setCapacity((int) seatRepository.countByScreenId(screenId));
-
-		return ResponseEntity.ok(r);
-
+		return ResponseEntity.ok(response);
 	}
+
 
 	public ResponseEntity<?> deleteScreen(Long screenId) {
 
-		Screen s = screenRepository.findById(screenId)
-
+		Screen screen = screenRepository.findById(screenId)
 				.orElseThrow(() -> new ScreenNotFoundException("Screen not found with id: " + screenId));
 
-		screenRepository.delete(s);
+		screenRepository.delete(screen);
 
 		return ResponseEntity.ok("Screen deleted successfully");
-
 	}
-
 }

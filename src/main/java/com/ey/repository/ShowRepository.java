@@ -10,10 +10,13 @@ import com.ey.entity.MovieShow;
 
 @Repository
 public interface ShowRepository extends JpaRepository<MovieShow, Long>{
-	List<MovieShow> findByScreenIdAndShowDate(Long screenId, LocalDate showDate);
 	
-	List<MovieShow> findByMovieId(Long movieId);
+	List<MovieShow> findByScreen_ScreenIdAndShowDate(Long screenId, LocalDate showDate);
 	
-	List<MovieShow> findByScreenId(Long screenId);
+	List<MovieShow> findByMovie_MovieId(Long movieId);
+	
+	List<MovieShow> findByScreen_ScreenId(Long screenId);
+	
+	List<MovieShow> findByMovie_MovieIdAndScreen_Theatre_TheatreId(Long movieId, Long theatreId);
 
 }

@@ -1,9 +1,12 @@
 package com.ey.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Seat {
@@ -12,7 +15,11 @@ public class Seat {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long seatId;
 	
-	private Long screenId;
+//	private Long screenId;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "screen_id",nullable = false)
+	private Screen screen;
 	
 	private String seatTag;
 	
@@ -24,15 +31,6 @@ public class Seat {
 		super();
 	}
 
-	public Seat(Long seatId, Long screenId, String seatTag, String rowLabel, Integer seatNumber) {
-		super();
-		this.seatId = seatId;
-		this.screenId = screenId;
-		this.seatTag = seatTag;
-		this.rowLabel = rowLabel;
-		this.seatNumber = seatNumber;
-	}
-
 	public Long getSeatId() {
 		return seatId;
 	}
@@ -41,12 +39,12 @@ public class Seat {
 		this.seatId = seatId;
 	}
 
-	public Long getScreenId() {
-		return screenId;
+	public Screen getScreen() {
+		return screen;
 	}
 
-	public void setScreenId(Long screenId) {
-		this.screenId = screenId;
+	public void setScreen(Screen screen) {
+		this.screen = screen;
 	}
 
 	public String getSeatTag() {
@@ -72,6 +70,8 @@ public class Seat {
 	public void setSeatNumber(Integer seatNumber) {
 		this.seatNumber = seatNumber;
 	}
+
+	
 	
 	
 

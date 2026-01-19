@@ -10,10 +10,10 @@ import com.ey.entity.ShowSeat;
 @Repository
 public interface ShowSeatRepository extends JpaRepository<ShowSeat, Long>{
 	
-	List<ShowSeat> findByShowId(Long showId);
+	List<ShowSeat> findByShow_ShowId(Long showId);
 	
-	List<ShowSeat> findByShowIdAndStatus(Long showId, String status);
+	List<ShowSeat> findByShow_ShowIdAndStatus(Long showId, String status);
 	
-	boolean existsByShowId(Long showId);
+	boolean existsByShow_ShowId(Long showId);
 
 }
