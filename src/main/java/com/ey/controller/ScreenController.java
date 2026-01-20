@@ -1,5 +1,7 @@
 package com.ey.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -37,6 +39,12 @@ public class ScreenController {
 	@GetMapping("/{screenId}")
 	public ResponseEntity<?> getScreenById(@PathVariable Long screenId){
 		return screenService.getScreenById(screenId);
+	}
+
+	@GetMapping("/theatre/{theatreId}")
+	public List<ScreenResponse> getScreensByTheatre(@PathVariable Long theatreId) {
+
+		return screenService.getScreensByTheatre(theatreId);
 	}
 	
 	@PutMapping("/{screenId}")

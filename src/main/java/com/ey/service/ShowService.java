@@ -13,6 +13,7 @@ import com.ey.dto.response.ShowResponse;
 import com.ey.entity.Movie;
 import com.ey.entity.MovieShow;
 import com.ey.entity.Screen;
+import com.ey.exception.ResourceNotFoundException;
 import com.ey.exception.ShowNotFoundException;
 import com.ey.mapper.ShowMapper;
 import com.ey.repository.MovieRepository;
@@ -136,4 +137,16 @@ public class ShowService {
 
         return ResponseEntity.ok("Show deleted successfully");
     }
+
+
+	public List<ShowResponse> getShowsByScreen(Long screenId) {
+
+		List<MovieShow> shows = showRepository.findByScreen_ScreenId(screenId);
+
+		if (shows.isEmpty()) {
+			throw new ResourceNotFoundException("No shows found for screenId: " + screenId);
+		}
+
+		return shows.stream().map(ShowMapper::toResponse).toList();
+	}
 }

@@ -12,6 +12,7 @@ import com.ey.dto.request.CreateScreenRequest;
 import com.ey.dto.response.ScreenResponse;
 import com.ey.entity.Screen;
 import com.ey.entity.Theatre;
+import com.ey.exception.ResourceNotFoundException;
 import com.ey.exception.ScreenNotFoundException;
 import com.ey.mapper.ScreenMapper;
 import com.ey.repository.ScreenRepository;
@@ -102,5 +103,16 @@ public class ScreenService {
 		screenRepository.delete(screen);
 
 		return ResponseEntity.ok("Screen deleted successfully");
+	}
+
+	public List<ScreenResponse> getScreensByTheatre(Long theatreId) {
+
+		List<Screen> screens = screenRepository.findByTheatre_TheatreId(theatreId);
+
+		if (screens.isEmpty()) {
+			throw new ResourceNotFoundException("No screens found for theatreId: " + theatreId);
+		}
+
+		return screens.stream().map(ScreenMapper::toResponse).toList();
 	}
 }

@@ -33,6 +33,9 @@ public class SecurityConfig {
 
 						// Public read-only
 						.requestMatchers(HttpMethod.GET, "/api/movies/**").permitAll()
+						.requestMatchers(HttpMethod.GET, "/api/theatres/**").permitAll()
+						.requestMatchers(HttpMethod.GET, "/api/screens/**").permitAll()
+						.requestMatchers(HttpMethod.GET, "/api/shows/**").permitAll()
 						.requestMatchers(HttpMethod.GET, "/api/show-seats/**").permitAll()
 
 						// Admin
